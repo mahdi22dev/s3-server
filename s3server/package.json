@@ -6,13 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node s3server",
-    "dev": "node s3server",
+    "dev": "nodemon s3server",
     "start:s3": "s3rver -d ./data -p 4569 -h localhost -l ./s3rver.log"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
     "s3rver": "^3.7.1"
   },
   "devDependencies": {

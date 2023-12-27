@@ -13,7 +13,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.get("/", (req, res) => {
-  res.send("s3 server");
+  res.send("s3 client");
 });
 
 const s3 = client;
@@ -96,7 +96,7 @@ app.get("/file-meta/:name", async (req, res) => {
 
     if (metadata) {
       const fileMetadata = {
-        name: metadata.originalFilename,
+        name: metadata.originalFilename || fileName,
         size: metadata.ContentLength,
         lastModified: metadata.LastModified,
         contentType: metadata.ContentType,

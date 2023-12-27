@@ -1,4 +1,10 @@
 const s3rver = require("s3rver");
+const express = require("express");
+const cors = require("cors");
+const app = express();
+const port = 4569;
+app.use(express.json());
+app.use(cors());
 
 const s3Server = new s3rver({
   port: 4569,
@@ -9,11 +15,12 @@ const s3Server = new s3rver({
       name: "tmp-files", // Replace with your desired bucket name
       configureKey: false,
     },
-    {
-      name: "test-bucket", // Replace with your desired bucket name
-      configureKey: false,
-    },
   ],
 });
+
 s3Server.run();
 console.log("s3 mock server start");
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
