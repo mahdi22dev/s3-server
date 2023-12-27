@@ -2,8 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
 const client = require("./lib/S3Client");
-const s3Server = require("./lib/S3server");
-const { generateUniqueFileName } = require("./lib/utils");
+const crypto = require("crypto");
 const app = express();
 const port = 5000;
 app.use(express.json());
@@ -17,8 +16,6 @@ app.get("/", (req, res) => {
   res.send("s3 server");
 });
 
-const s3serverinstance = s3Server;
-s3serverinstance.run();
 const s3 = client;
 
 // Endpoint for file uploads
@@ -27,10 +24,15 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   if (!file) {
     return json({ success: false, message: "File not valid" }).status(201);
   }
+  const randomString = crypto.randomBytes(8).toString("hex");
+  const generatedFileKey = randomString + "_" + file.originalname;
   const params = {
     Bucket: "tmp-files", // Replace with your bucket name
-    Key: file.originalname,
+    Key: generatedFileKey,
     Body: file.buffer,
+    Metadata: {
+      originalFilename: file.originalname,
+    },
   };
   try {
     await s3.upload(params).promise();
@@ -39,7 +41,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       .json({
         success: true,
         message: "File uploaded successfully.",
-        fileName: file.originalname,
+        fileName: generatedFileKey,
       })
       .status(201);
   } catch (error) {
@@ -91,10 +93,10 @@ app.get("/file-meta/:name", async (req, res) => {
     };
     // Create a read stream for the requested file
     const metadata = await s3.headObject(params).promise();
+
     if (metadata) {
-      // Extract relevant metadata
       const fileMetadata = {
-        name: fileName,
+        name: metadata.originalFilename,
         size: metadata.ContentLength,
         lastModified: metadata.LastModified,
         contentType: metadata.ContentType,

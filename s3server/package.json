@@ -1,0 +1,21 @@
+{
+  "name": "s3-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node s3server",
+    "dev": "node s3server",
+    "start:s3": "s3rver -d ./data -p 4569 -h localhost -l ./s3rver.log"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "s3rver": "^3.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
