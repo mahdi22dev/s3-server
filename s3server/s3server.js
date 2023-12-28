@@ -18,9 +18,8 @@ const s3Server = new s3rver({
   ],
 });
 
-s3Server.run();
-console.log("s3 mock server start");
-
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+s3Server.run();
+console.log("s3 mock server start");
