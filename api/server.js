@@ -3,6 +3,7 @@ const multer = require("multer");
 const cors = require("cors");
 const client = require("./lib/S3Client");
 const crypto = require("crypto");
+const s3Server = require("./lib/S3Server");
 const app = express();
 const port = 5000;
 app.use(express.json());
@@ -15,7 +16,7 @@ const upload = multer({ storage });
 app.get("/", (req, res) => {
   res.send("s3 client");
 });
-
+s3Server.run();
 const s3 = client;
 
 // Endpoint for file uploads
@@ -84,6 +85,7 @@ app.get("/get-file/:name", async (req, res) => {
   }
 });
 
+// get file metadata
 app.get("/file-meta/:name", async (req, res) => {
   try {
     const fileName = decodeURIComponent(req.params.name);
