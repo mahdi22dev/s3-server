@@ -1,5 +1,6 @@
 # render.yaml
 services:
+  - type: web
   - name: localstack
     plan: starter
     image: localstack/localstack:1.0.4
@@ -10,7 +11,7 @@ services:
       DEFAULT_REGION: us-east-2
     ports:
       - 4567
-
+  - type: web
   - name: aws-cli
     plan: starter
     image: amazon/aws-cli
