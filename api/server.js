@@ -3,6 +3,7 @@ const multer = require("multer");
 const cors = require("cors");
 const client = require("./lib/S3Client");
 const crypto = require("crypto");
+const s3Server = require("./lib/S3Server");
 const app = express();
 const port = 5000;
 app.use(express.json());
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
   res.send("s3 client");
 });
 const s3 = client;
+s3Server.run();
 const bucketname = "my-bucket";
 
 // Endpoint for file uploads

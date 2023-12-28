@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
 
 const client = new AWS.S3({
-  endpoint: "http://localhost:4567", // Point to your local s3rver instance
+  endpoint: "http://localhost:4569", // Point to your local s3rver instance
   s3ForcePathStyle: true,
   accessKeyId: "test",
   secretAccessKey: "test",
