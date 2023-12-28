@@ -1,5 +1,4 @@
 version: "3"
-
 services:
   localstack:
     image: localstack/localstack:1.0.4
