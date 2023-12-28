@@ -1,7 +1,11 @@
 # render.yaml
 services:
   - type: web
+  - runtime: docker
   - name: localstack
+    branch: master # optional (defaults to master)
+    rootDir: webdis
+    dockerCommand: docker-compose up
     plan: starter
     image: localstack/localstack:1.0.4
     envVars:
