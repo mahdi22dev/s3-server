@@ -1,5 +1,4 @@
-# A private localstack service
-- type: pserv
+- type: web
   name: localstack
   runtime: docker
   image: localstack/localstack:1.0.4
@@ -16,8 +15,7 @@
     - port: 4566
       protocol: http
 
-# A private aws-cli service
-- type: pserv
+- type: web
   name: aws-cli
   runtime: docker
   image: amazon/aws-cli
