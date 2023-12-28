@@ -1,34 +1,36 @@
-services:
-  # A Docker web service
-  - type: web
-    name: webdis
-    runtime: image
-    image:
-       url: docker.io/localstack:1.0.4
-    plan: starter
-    envVars:
-      SERVICES: s3:4566
-      HOSTNAME: localstack
-      HOSTNAME_EXTERNAL: localstack
-      DEFAULT_REGION: us-east-2
-    ports:
-      - 4567
-  # A Docker web service
-  - type: web
-  - name: aws-cli
-    plan: starter
-    image: amazon/aws-cli
-    envVars:
-      AWS_ACCESS_KEY_ID: test
-      AWS_SECRET_ACCESS_KEY: test
-      AWS_DEFAULT_REGION: us-east-2
-    volumes:
-      - name: testbucket
-        path: /aws
-    dependsOn:
-      - localstack
-    runCommand: aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket my-bucket --region us-east-1
+# A private localstack service
+- type: pserv
+  name: localstack
+  runtime: docker
+  image: localstack/localstack:1.0.4
+  envVars:
+    - key: SERVICES
+      value: s3:4566
+    - key: HOSTNAME
+      value: localstack
+    - key: HOSTNAME_EXTERNAL
+      value: localstack
+    - key: DEFAULT_REGION
+      value: us-east-2
+  ports:
+    - port: 4566
+      protocol: http
 
-    volumes:
-  - name: testbucket
-    path: /mnt/data
+# A private aws-cli service
+- type: pserv
+  name: aws-cli
+  runtime: docker
+  image: amazon/aws-cli
+  dependsOn:
+    - localstack
+  envVars:
+    - key: AWS_ACCESS_KEY_ID
+      value: test
+    - key: AWS_SECRET_ACCESS_KEY
+      value: test
+    - key: AWS_DEFAULT_REGION
+      value: us-east-2
+  volumes:
+    - name: testbucket
+      mountPath: /aws
+  command: /bin/sh -c "aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket my-bucket --region us-east-1"
