@@ -3,7 +3,6 @@ const multer = require("multer");
 const cors = require("cors");
 const client = require("./lib/S3Client");
 const crypto = require("crypto");
-const s3Server = require("./lib/S3Server");
 const app = express();
 const port = 5000;
 app.use(express.json());
@@ -16,8 +15,8 @@ const upload = multer({ storage });
 app.get("/", (req, res) => {
   res.send("s3 client");
 });
-s3Server.run();
 const s3 = client;
+const bucketname = "my-bucket";
 
 // Endpoint for file uploads
 app.post("/upload", upload.single("file"), async (req, res) => {
@@ -28,7 +27,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   const randomString = crypto.randomBytes(8).toString("hex");
   const generatedFileKey = randomString + "_" + file.originalname;
   const params = {
-    Bucket: "tmp-files", // Replace with your bucket name
+    Bucket: bucketname,
     Key: generatedFileKey,
     Body: file.buffer,
     Metadata: {
@@ -56,7 +55,7 @@ app.get("/get-file/:name", async (req, res) => {
   try {
     const fileName = decodeURIComponent(req.params.name);
     const params = {
-      Bucket: "tmp-files", // Replace with your bucket name
+      Bucket: bucketname, // Replace with your bucket name
       Key: fileName,
     };
     // Create a read stream for the requested file
@@ -90,7 +89,7 @@ app.get("/file-meta/:name", async (req, res) => {
   try {
     const fileName = decodeURIComponent(req.params.name);
     const params = {
-      Bucket: "tmp-files", // Replace with your bucket name
+      Bucket: bucketname, // Replace with your bucket name
       Key: fileName,
     };
     // Create a read stream for the requested file

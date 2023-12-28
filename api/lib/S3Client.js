@@ -1,10 +1,10 @@
 const AWS = require("aws-sdk");
 
 const client = new AWS.S3({
-  endpoint: "https://file-uploader-api.onrender.com:4569", // Point to your local s3rver instance
+  endpoint: "http://localhost:4567", // Point to your local s3rver instance
   s3ForcePathStyle: true,
-  accessKeyId: "S3RVER",
-  secretAccessKey: "S3RVER",
+  accessKeyId: "test",
+  secretAccessKey: "test",
 });
 
 module.exports = client;
