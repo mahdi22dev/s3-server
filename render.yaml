@@ -34,3 +34,4 @@
     - name: testbucket
       mountPath: /aws
   command: /bin/sh -c "aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket my-bucket --region us-east-1"
+  proxy_url: http://placeholderForProxy
