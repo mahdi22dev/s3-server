@@ -1,0 +1,31 @@
+# render.yaml
+
+services:
+  - name: localstack
+    plan: starter
+    image: localstack/localstack:1.0.4
+    envVars:
+      SERVICES: s3:4566
+      HOSTNAME: localstack
+      HOSTNAME_EXTERNAL: localstack
+      DEFAULT_REGION: us-east-2
+    ports:
+      - 4567
+
+  - name: aws-cli
+    plan: starter
+    image: amazon/aws-cli
+    envVars:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-2
+    volumes:
+      - name: testbucket
+        path: /aws
+    dependsOn:
+      - localstack
+    runCommand: aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket my-bucket --region us-east-1
+
+volumes:
+  - name: testbucket
+    path: /mnt/data
