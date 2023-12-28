@@ -5,7 +5,7 @@ const s3Server = new s3rver({
   directory: "/tmp/s3rver_test_directory",
   configureBuckets: [
     {
-      name: "tmp-files", // Replace with your desired bucket name
+      name: "my-bucket", // Replace with your desired bucket name
       configureKey: false,
     },
   ],
