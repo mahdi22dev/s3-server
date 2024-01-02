@@ -1,7 +1,18 @@
 version: "3"
+# This compose will run an Express server along with an S3 server
 
-# this compose file will run only s3 server on localhost:4569
 services:
+  file-upload-backend:
+    # build: .
+    image: api-local-backendserver:latest
+    environment:
+      S3SERVER: http://localhost:4569
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    restart: always
+
   localstack:
     image: localstack/localstack:1.0.4
     ports:
